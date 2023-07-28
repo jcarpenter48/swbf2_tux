@@ -1,0 +1,32 @@
+geo1c_sub
+tat2c_sub
+tat2g_sub
+kas1c_sub
+kas1g_sub
+kas3c_sub
+kas3g_sub
+kas2c_sub
+kas2g_sub
+mus1g_sub
+uta1g_sub
+tat1c_sub
+tat1g_sub
+cor1c_sub
+cor1g_sub
+tat3c_sub --done but tatmusicfix doesn't seem to work
+tat3g_sub --ditto
+kam1g_sub
+kam2g_sub
+end1g_sub
+nab2c_sub
+
+myg1g_sub --might be missing turret sounds
+rhn2g_sub
+sal1g_sub
+bes1g_sub
+
+
+not done:
+
+nab2g_sub --needs AAC's replaced with Gians because of some missing weapon sounds
+

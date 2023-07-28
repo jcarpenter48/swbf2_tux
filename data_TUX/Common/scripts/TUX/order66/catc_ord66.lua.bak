@@ -1,0 +1,151 @@
+ScriptCB_DoFile("ObjectiveTDM")
+ScriptCB_DoFile("setup_teams")
+REP = 1
+JED = 2
+ATT = 1
+DEF = 2
+
+function ScriptPostLoad()
+    SetProperty("cp1","CaptureRegion","")
+    SetProperty("cp2","CaptureRegion","")
+    SetProperty("CP3","CaptureRegion","")
+    SetProperty("cp4","CaptureRegion","")
+    SetProperty("cp5","CaptureRegion","")
+    SetProperty("cp6","CaptureRegion","")
+    SetProperty("cp1","Team","1")
+    SetProperty("cp2","Team","2")
+    SetProperty("CP3","Team","2")
+    SetProperty("cp4","Team","1")
+    SetProperty("cp5","Team","2")
+    SetProperty("cp6","Team","1")
+    TDM = ObjectiveTDM:New({ teamATT = 1, teamDEF = 2, multiplayerScoreLimit = 75, textATT = "game.modes.tdm", textDEF = "game.modes.tdm2", multiplayerRules = true, isCelebrityDeathmatch = true })
+    TDM:Start()
+	
+end
+    
+function ScriptInit()
+    -- Designers, these two lines *MUST* be first!
+    StealArtistHeap(1000 * 1024)
+    SetPS2ModelMemory(4535000)
+    ReadDataFile("ingame.lvl")
+    
+	SetMaxFlyHeight(500)
+	SetMaxPlayerFlyHeight(500)
+    SetGroundFlyerMap(1)
+    
+    SetMemoryPoolSize ("ClothData",20)
+    SetMemoryPoolSize ("Combo",30)              -- should be ~ 2x number of jedi classes
+    SetMemoryPoolSize ("Combo::State",500)      -- should be ~12x #Combo
+    SetMemoryPoolSize ("Combo::Transition",500) -- should be a bit bigger than #Combo::State
+    SetMemoryPoolSize ("Combo::Condition",500)  -- should be a bit bigger than #Combo::State
+    SetMemoryPoolSize ("Combo::Attack",400)     -- should be ~8-12x #Combo
+    SetMemoryPoolSize ("Combo::DamageSample",4000)  -- should be ~8-12x #Combo::Attack
+    SetMemoryPoolSize ("Combo::Deflect",88)     -- should be ~1x #combo
+   
+    
+    ReadDataFile("sound\\cor.lvl;cor1cw")
+	
+    ReadDataFile("SIDE\\rep.lvl","rep_inf_ep3_rifleman","rep_inf_ep3_rocketeer","rep_inf_ep3_engineer","rep_inf_ep3_sniper","rep_inf_ep3_officer","rep_inf_ep3_jettrooper")
+    ReadDataFile("SIDE\\jed.lvl","jed_knight_01","jed_knight_02","jed_knight_03","jed_knight_04")
+    ReadDataFile("SIDE\\infantry.lvl","jed_knight_10","jed_knight_13","jed_knight_14")
+    SetupTeams({ 
+        REP =         { team = REP, units = 32, reinforcements = -1, 
+          soldier =           { "rep_inf_ep3_rifleman", 13, 16 }, 
+          assault =           { "rep_inf_ep3_rocketeer", 5, 4 }, 
+          engineer =           { "rep_inf_ep3_engineer", 3, 4 }, 
+          sniper =           { "rep_inf_ep3_sniper", 2, 4 }, 
+          officer =           { "rep_inf_ep3_officer", 2, 4 }, 
+          special =           { "rep_inf_ep3_jettrooper", 2, 4 }
+         }, 
+        JED =         { team = JED, units = 15, reinforcements = -1, 
+          soldier =           { "jed_knight_01", 4, 6 }, 
+          assault =           { "jed_knight_02", 4, 6 }, 
+          engineer =           { "jed_knight_03", 3, 6 }, 
+          sniper =           { "jed_knight_04", 2, 6 }, 
+          officer =           { "jed_knight_10", 1, 1 }, 
+          special =           { "jed_knight_13", 1, 1 }
+         }
+       })
+    AddUnitClass(JED,"jed_knight_14",1,2)
+	SetTeamName(JED, "Jedi")
+            
+    --  Level Stats
+    ClearWalkers()
+    AddWalkerType(0, 6) -- 4 droidekas (special case: 0 leg pairs)
+    AddWalkerType(1, 0) --
+--    AddWalkerType(2, 2) -- 2 spider walkers with 2 leg pairs each
+    AddWalkerType(3, 0) -- 2 attes with 3 leg pairs each
+    local weaponCnt = 230
+    SetMemoryPoolSize("Aimer", 70)
+    SetMemoryPoolSize("AmmoCounter", weaponCnt)
+    SetMemoryPoolSize("BaseHint", 220)
+    SetMemoryPoolSize("EnergyBar", weaponCnt)
+    SetMemoryPoolSize("EntityHover", 11)
+    SetMemoryPoolSize("EntityLight", 40)
+    SetMemoryPoolSize("EntityCloth", 58)
+    SetMemoryPoolSize("EntityFlyer", 26)
+    SetMemoryPoolSize("EntitySoundStream", 3)
+    SetMemoryPoolSize("EntitySoundStatic", 120)
+    SetMemoryPoolSize("MountedTurret", 15)
+    SetMemoryPoolSize("Navigator", 50)
+    SetMemoryPoolSize("Obstacle", 300)
+    SetMemoryPoolSize("PathFollower", 50)
+    SetMemoryPoolSize("PathNode", 512)
+    SetMemoryPoolSize("TentacleSimulator", 8)
+    SetMemoryPoolSize("TreeGridStack", 300)
+    SetMemoryPoolSize("UnitAgent", 50)
+    SetMemoryPoolSize("UnitController", 50)
+    SetMemoryPoolSize("Weapon", weaponCnt)
+
+    SetSpawnDelay(10.0, 0.25)
+ReadDataFile("cat\\cat.lvl","cat_conquest")
+    SetDenseEnvironment("false")
+    
+    --  Sound
+    voiceSlow = OpenAudioStream("sound\\global.lvl", "rep_unit_vo_slow")
+    AudioStreamAppendSegments("sound\\global.lvl", "cis_unit_vo_slow", voiceSlow)
+    AudioStreamAppendSegments("sound\\global.lvl", "wok_unit_vo_slow", voiceSlow)
+    AudioStreamAppendSegments("sound\\global.lvl", "global_vo_slow", voiceSlow)    
+    voiceQuick = OpenAudioStream("sound\\global.lvl", "rep_unit_vo_quick")
+    AudioStreamAppendSegments("sound\\global.lvl", "cis_unit_vo_quick", voiceQuick)   
+    AudioStreamAppendSegments("sound\\global.lvl", "wok_unit_vo_quick", voiceQuick) 
+
+    OpenAudioStream("sound\\global.lvl",  "cw_music")
+    OpenAudioStream("sound\\cor.lvl",  "cor1")
+    OpenAudioStream("sound\\cor.lvl",  "cor1")
+
+    SetBleedingVoiceOver(REP, REP, "rep_off_com_report_us_overwhelmed", 1)
+    SetBleedingVoiceOver(REP, CIS, "rep_off_com_report_enemy_losing",   1)
+    SetBleedingVoiceOver(CIS, REP, "cis_off_com_report_enemy_losing",   1)
+    SetBleedingVoiceOver(CIS, CIS, "cis_off_com_report_us_overwhelmed", 1)
+
+    SetAmbientMusic(REP, 1.0, "rep_cor_amb_start",  0,1)
+    SetAmbientMusic(REP, 0.8, "rep_cor_amb_middle", 1,1)
+    SetAmbientMusic(REP, 0.2,"rep_cor_amb_end",    2,1)
+    SetAmbientMusic(CIS, 1.0, "cis_cor_amb_start",  0,1)
+    SetAmbientMusic(CIS, 0.8, "cis_cor_amb_middle", 1,1)
+    SetAmbientMusic(CIS, 0.2,"cis_cor_amb_end",    2,1)
+    SetVictoryMusic(REP, "rep_cor_amb_victory")
+    SetDefeatMusic (REP, "rep_cor_amb_defeat")
+    SetVictoryMusic(CIS, "cis_cor_amb_victory")
+    SetDefeatMusic (CIS, "cis_cor_amb_defeat")
+
+    SetOutOfBoundsVoiceOver(1, "repleaving")
+    SetOutOfBoundsVoiceOver(2, "cisleaving")
+
+    SetSoundEffect("ScopeDisplayZoomIn",  "binocularzoomin")
+    SetSoundEffect("ScopeDisplayZoomOut", "binocularzoomout")
+    SetSoundEffect("SpawnDisplayUnitChange",       "shell_select_unit")
+    SetSoundEffect("SpawnDisplayUnitAccept",       "shell_menu_enter")
+    SetSoundEffect("SpawnDisplaySpawnPointChange", "shell_select_change")
+    SetSoundEffect("SpawnDisplaySpawnPointAccept", "shell_menu_enter")
+    SetSoundEffect("SpawnDisplayBack",             "shell_menu_exit")
+
+    SetAttackingTeam(ATT)
+	AddCameraShot(0.917489, -0.111216, 0.379121, 0.045956, -223.090454, 387.186890, 184.659683);
+	AddCameraShot(0.867877, -0.081506, -0.487901, -0.045821, -688.494690, 464.960999, 199.592178);
+	AddCameraShot(0.773294, -0.093349, 0.622618, 0.075160, -451.114075, 329.369049, 3.212870);
+	AddCameraShot(0.411657, 0.026663, -0.909044, 0.058878, -386.520447, 329.369049, -50.771320);
+	AddCameraShot(0.594405, 0.085194, -0.791551, 0.113450, -492.424255, 329.369049, -74.539330);
+
+end
