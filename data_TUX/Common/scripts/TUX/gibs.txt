@@ -1,0 +1,9 @@
+Define chunks in unit ODF
+set chunkfrequency to 0.0
+function in lua:
+OnCharacterDeath:
+GetObjectLastHitWeaponClass
+if the weapon is an explosive or shotgun of some kind
+set chunkfrequency to high number, like 0.7 or 1.0 (guaranteed)
+
+unit gets gibbed

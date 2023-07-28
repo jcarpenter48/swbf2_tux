@@ -1,0 +1,305 @@
+--
+-- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
+--
+
+-- load the gametype script
+ScriptCB_DoFile("ObjectiveConquest")
+ScriptCB_DoFile("setup_teams") 
+
+--  Empire Attacking (attacker is always #1)
+CIS = 2
+REP = 1
+GAR = 3
+--  These variables do not change
+ATT = 1
+DEF = 2
+
+ ---------------------------------------------------------------------------
+ -- FUNCTION:    ScriptInit
+ -- PURPOSE:     This function is only run once
+ -- INPUT:
+ -- OUTPUT:
+ -- NOTES:       The name, 'ScriptInit' is a chosen convention, and each
+ --              mission script must contain a version of this function, as
+ --              it is called from C to start the mission.
+ ---------------------------------------------------------------------------
+ function ScriptPostLoad()
+  	SetTeamAsEnemy(3, 1)
+    SetTeamAsEnemy(1, 3)
+    SetTeamAsEnemy(3, 2)
+    SetTeamAsEnemy(2, 3)
+	
+	function killAll(teamIndex)
+		--todo: iterate for loop to iterate through all units on team and kill
+		local thisSize = GetTeamSize(teamIndex)
+		local tempIndex = 0
+		while tempIndex < thisSize do
+			local memberIndex = GetTeamMember(teamIndex, tempIndex)
+		    local unit = GetCharacterUnit(memberIndex)
+			KillObject(unit)
+		end
+	end
+	
+	function cycleTeams()
+	    --kill all AI on the battlefield and disallow AI spawn while we do our thing
+		killAll(1)
+		killAll(2)
+		killAll(3)
+		AllowAISpawn(1, 0)
+		AllowAISpawn(2, 0)
+		AllowAISpawn(3, 0)
+	    --shift every team index by 1 or loop back if needed
+		CIS = CIS + 1
+		REP = REP + 1
+		GAR = GAR + 1 
+		if (CIS == 4) then
+			CIS = 1
+	    end
+		if (REP == 4) then
+			REP = 1
+	    end
+		if (GAR == 4) then
+			GAR = 1
+	    end
+		--go through command posts and shift team index by 1
+		local commandPosts = {    
+			[1] = "CP2",
+			[2] = "CP7",
+			[3] = "CP10",
+			[4] = "CP1",
+			[5] = "CP3",
+			[6] = "CP4",
+		}
+		for _, post in ipairs(commandPosts) do
+			tempIndex = GetObjectTeam(post)
+			tempIndex = tempIndex + 1
+			if (tempIndex == 4) then
+				tempIndex = 1
+			end
+			SetObjectTeam(post, tempIndex)
+		end
+		--update our classes
+			--todo: update classes
+		SetClassProperty("rep_inf_ep3_rifleman", "WeaponName1", "cis_weap_inf_fusioncutter")
+		SetClassProperty("rep_inf_ep3_rifleman", "WeaponName2", "cis_weap_inf_fusioncutter")
+		SetClassProperty("rep_inf_ep3_rifleman", "WeaponName3", "cis_weap_inf_fusioncutter")
+		
+		SetClassProperty("cis_inf_rifleman", "WeaponName1", "cis_weap_inf_fusioncutter")
+		SetClassProperty("cis_inf_rifleman", "WeaponName2", "cis_weap_inf_fusioncutter")
+		SetClassProperty("cis_inf_rifleman", "WeaponName3", "cis_weap_inf_fusioncutter")
+		
+		SetClassProperty("tat_inf_tuskenraider", "WeaponName1", "cis_weap_inf_fusioncutter")
+		SetClassProperty("tat_inf_tuskenraider", "WeaponName2", "cis_weap_inf_fusioncutter")
+		SetClassProperty("tat_inf_tuskenraider", "WeaponName3", "cis_weap_inf_fusioncutter")
+	end
+    --This defines the CPs.  These need to happen first
+    cp1 = CommandPost:New{name = "CP2"}
+    cp2 = CommandPost:New{name = "CP7"}
+    cp3 = CommandPost:New{name = "CP10"}
+    cp4 = CommandPost:New{name = "CP1"}
+    cp5 = CommandPost:New{name = "CP3"}
+    cp6 = CommandPost:New{name = "CP4"}
+    
+    --This sets up the actual objective.  This needs to happen after cp's are defined
+    conquest = ObjectiveConquest:New{teamATT = ATT, teamDEF = DEF, 
+                                     textATT = "level.yavin1.con.att", 
+                                     textDEF = "level.yavin1.con.def",
+                                     multiplayerRules = true}
+    
+    --This adds the CPs to the objective.  This needs to happen after the objective is set up
+    conquest:AddCommandPost(cp1)
+    conquest:AddCommandPost(cp2)
+    conquest:AddCommandPost(cp3)
+    conquest:AddCommandPost(cp4)
+    conquest:AddCommandPost(cp5)
+    conquest:AddCommandPost(cp6)
+    
+    conquest:Start()
+ 
+    EnableSPHeroRules()
+    
+    
+ end
+ 
+function ScriptInit()
+    -- Designers, these two lines *MUST* be first!
+    StealArtistHeap(600*1024)
+    SetPS2ModelMemory(4100000)
+    ReadDataFile("ingame.lvl")
+    
+	local numPlayers = ScriptCB_GetNumCameras() --better than checking number of plugged in controllers
+    local isMultiplayer = ScriptCB_InMultiplayer() --I prefer checking once than for each if-block
+	
+    --SetMemoryPoolSize ("Combo",3)              -- should be ~ 2x number of jedi classes
+    --SetMemoryPoolSize ("Combo::State",50)      -- should be ~12x #Combo
+    --SetMemoryPoolSize ("Combo::Transition",50) -- should be a bit bigger than #Combo::State
+    --SetMemoryPoolSize ("Combo::Condition",50)  -- should be a bit bigger than #Combo::State
+    --SetMemoryPoolSize ("Combo::Attack",400)     -- should be ~8-12x #Combo
+    SetMemoryPoolSize ("Combo::DamageSample",1000)  -- should be ~8-12x #Combo::Attack
+    --SetMemoryPoolSize ("Combo::Deflect",5)     -- should be ~1x #combo
+	SetMemoryPoolSize("SoldierAnimation", 450)
+	
+    ReadDataFile("sound\\yav.lvl;yav1cw")
+    ReadDataFile("SIDE\\rep.lvl",
+                "rep_inf_ep3_rifleman",
+                "rep_inf_ep3_rocketeer",
+                "rep_inf_ep3_engineer",
+                "rep_inf_ep3_sniper", 
+                "rep_inf_ep3_officer",
+                "rep_hover_barcspeeder",
+				"rep_hover_fightertank",
+				"rep_hero_kiyadimundi",
+                "rep_inf_ep3_jettrooper")        
+                
+    ReadDataFile("SIDE\\cis.lvl",
+                "cis_inf_rifleman",
+                "cis_inf_rocketeer",
+                "cis_inf_engineer",
+                "cis_inf_sniper",
+                "cis_inf_officer",
+                "cis_inf_droideka",
+                --"cis_hero_darthmaul",
+				"Cis_hover_stap",
+                "cis_hover_aat")
+    
+    ReadDataFile("SIDE\\des.lvl",
+                             "tat_inf_tuskenraider",
+                             "tat_inf_tuskenhunter")
+				
+    ReadDataFile("SIDE\\tur.lvl", 
+                "tur_bldg_laser")          
+                
+     
+    
+    SetupTeams{
+        rep = {
+            team = REP,
+            units = 20,
+            reinforcements = 150,
+            soldier  = { "rep_inf_ep3_rifleman",9, 20},
+            --assault  = { "rep_inf_ep3_rocketeer",1, 4},
+            
+        },
+        cis = {
+            team = CIS,
+            units = 20,
+            reinforcements = 150,
+            soldier  = { "cis_inf_rifleman",9, 20},
+            --assault  = { "cis_inf_rocketeer",1, 4},
+        },
+		gar = {
+            team = GAR,
+            units = 20,
+            reinforcements = 150,
+            soldier  = { "tat_inf_tuskenraider",9, 20},
+            --assault  = { "tat_inf_tuskenhunter",1, 4},
+        }
+     }
+
+	SetTeamName(3, "locals")
+    --AddUnitClass(3, "tat_inf_tuskenraider", 6);
+    --AddUnitClass(3, "tat_inf_tuskenhunter", 2);
+    --SetUnitCount(3, 8)
+	AddAIGoal(3, "Conquest", 100)
+   
+    SetTeamAsNeutral(1, 3)
+    SetTeamAsNeutral(3, 1)
+    SetTeamAsNeutral(2, 3)
+    SetTeamAsNeutral(3, 2)
+
+    --  Level Stats
+        ClearWalkers()
+        AddWalkerType(0, 3) -- 3 droidekas (special case: 0 leg pairs)
+        --   AddWalkerType(1, 3) 
+        --    AddWalkerType(2, 0) -- 2 spider walkers with 2 leg pairs each
+        --    AddWalkerType(3, 0) -- 2 attes with 3 leg pairs each
+        local weaponCnt = 200
+        SetMemoryPoolSize ("Aimer", 60)
+        SetMemoryPoolSize ("AmmoCounter", weaponCnt)
+        SetMemoryPoolSize ("BaseHint", 245)
+        SetMemoryPoolSize ("EnergyBar", weaponCnt)
+        SetMemoryPoolSize ("EntityCloth", 17)
+        SetMemoryPoolSize ("EntityHover",5)
+        SetMemoryPoolSize ("EntitySoundStatic", 9)
+        SetMemoryPoolSize ("MountedTurret", 5)
+        SetMemoryPoolSize ("Navigator", 45)
+        SetMemoryPoolSize ("Obstacle", 390)
+        SetMemoryPoolSize ("PathFollower", 45)
+        SetMemoryPoolSize ("PathNode", 128)
+        SetMemoryPoolSize ("SoundSpaceRegion", 34)
+        SetMemoryPoolSize ("TentacleSimulator", 0)
+        SetMemoryPoolSize ("TreeGridStack", 180)
+        SetMemoryPoolSize ("UnitAgent", 45)
+        SetMemoryPoolSize ("UnitController", 45)
+        SetMemoryPoolSize ("Weapon", weaponCnt)
+		SetMemoryPoolSize("EntityFlyer", 4)   
+
+    SetSpawnDelay(10.0, 0.25)
+     ReadDataFile("tat\\tds.lvl","tds_Conquest")
+    --AddDeathRegion("Sarlac01")
+    SetMaxFlyHeight(90)
+    SetMaxPlayerFlyHeight(90)
+    --  Sound Stats
+    
+    voiceSlow = OpenAudioStream("sound\\global.lvl", "rep_unit_vo_slow")
+    AudioStreamAppendSegments("sound\\global.lvl", "cis_unit_vo_slow", voiceSlow)
+    AudioStreamAppendSegments("sound\\global.lvl", "global_vo_slow", voiceSlow)
+    
+    voiceQuick = OpenAudioStream("sound\\global.lvl", "rep_unit_vo_quick")
+    AudioStreamAppendSegments("sound\\global.lvl", "cis_unit_vo_quick", voiceQuick)    
+    
+    OpenAudioStream("sound\\global.lvl",  "cw_music")
+    OpenAudioStream("sound\\yav.lvl",  "yav1")
+    OpenAudioStream("sound\\yav.lvl",  "yav1")
+    -- OpenAudioStream("sound\\global.lvl",  "global_vo_quick")
+    -- OpenAudioStream("sound\\global.lvl",  "global_vo_slow")
+    -- OpenAudioStream("sound\\pol.lvl",  "pol1_emt")
+
+    SetBleedingVoiceOver(REP, REP, "rep_off_com_report_us_overwhelmed", 1)
+    SetBleedingVoiceOver(REP, CIS, "rep_off_com_report_enemy_losing",   1)
+    SetBleedingVoiceOver(CIS, REP, "cis_off_com_report_enemy_losing",   1)
+    SetBleedingVoiceOver(CIS, CIS, "cis_off_com_report_us_overwhelmed", 1)
+    
+    SetLowReinforcementsVoiceOver(REP, REP, "rep_off_defeat_im", .1, 1)
+    SetLowReinforcementsVoiceOver(REP, CIS, "rep_off_victory_im", .1, 1)
+    SetLowReinforcementsVoiceOver(CIS, CIS, "cis_off_defeat_im", .1, 1)
+    SetLowReinforcementsVoiceOver(CIS, REP, "cis_off_victory_im", .1, 1)    
+
+    SetOutOfBoundsVoiceOver(1, "cisleaving")
+    SetOutOfBoundsVoiceOver(2, "repleaving")
+
+    SetAmbientMusic(REP, 1.0, "rep_yav_amb_start",  0,1)
+    SetAmbientMusic(REP, 0.8, "rep_yav_amb_middle", 1,1)
+    SetAmbientMusic(REP, 0.2,"rep_yav_amb_end",    2,1)
+    SetAmbientMusic(CIS, 1.0, "cis_yav_amb_start",  0,1)
+    SetAmbientMusic(CIS, 0.8, "cis_yav_amb_middle", 1,1)
+    SetAmbientMusic(CIS, 0.2,"cis_yav_amb_end",    2,1)
+
+    SetVictoryMusic(REP, "rep_yav_amb_victory")
+    SetDefeatMusic (REP, "rep_yav_amb_defeat")
+    SetVictoryMusic(CIS, "cis_yav_amb_victory")
+    SetDefeatMusic (CIS, "cis_yav_amb_defeat")
+
+    SetSoundEffect("ScopeDisplayZoomIn",  "binocularzoomin")
+    SetSoundEffect("ScopeDisplayZoomOut", "binocularzoomout")
+    --SetSoundEffect("WeaponUnableSelect",  "com_weap_inf_weaponchange_null")
+    --SetSoundEffect("WeaponModeUnableSelect",  "com_weap_inf_modechange_null")
+    SetSoundEffect("SpawnDisplayUnitChange",       "shell_select_unit")
+    SetSoundEffect("SpawnDisplayUnitAccept",       "shell_menu_enter")
+    SetSoundEffect("SpawnDisplaySpawnPointChange", "shell_select_change")
+    SetSoundEffect("SpawnDisplaySpawnPointAccept", "shell_menu_enter")
+    SetSoundEffect("SpawnDisplayBack",             "shell_menu_exit")
+
+    --  Camera Stats
+	--Tat 1 - Dune Sea
+	--Crawler
+	AddCameraShot(-0.404895, 0.000992, -0.914360, -0.002240, -85.539894, 20.536297, 141.699493);
+	--Homestead
+	AddCameraShot(0.040922, 0.004049, -0.994299, 0.098381, -139.729523, 17.546598, -34.360893);
+	--Sarlac Pit
+	AddCameraShot(-0.312360, 0.016223, -0.948547, -0.049263, -217.381485, 20.150953, 54.514324);
+
+
+end
+
+
