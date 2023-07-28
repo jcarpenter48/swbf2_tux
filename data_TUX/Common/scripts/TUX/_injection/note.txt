@@ -1,0 +1,1 @@
+scripts in this folder need to be injected with LVLTool to replace the ones in the stock or merged mission.lvl
