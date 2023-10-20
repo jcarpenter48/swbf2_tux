@@ -10,14 +10,14 @@ Update this section!
 
 ## Xbox Title Update to-do (07/27/23):
 ### Core
-- [ ] Try to figure out why locals aren't spawning on Geonosis Spire
+- [x] Try to figure out why locals aren't spawning on Geonosis Spire
 - [x] Fix or replace towcables on Geonosis Spire GCW
-- [ ] Galactic Conquest voices (planet voiceovers)
+- [x] Galactic Conquest voices (planet voiceovers)
 - [ ] Galactic Conquest AI Fleet-building (no idea if this was a problem with base-game or not, or if it's an emulator problem or actually related to the recompiled shell)
 - [x] Rebel Raider challenges (Mygeeto is mostly working, need to repeat the process for the other maps and then fix things up) should be workable, except spa1 which was removed
 - [x] spa3_r - Needs TIE spawns lowered some, ship icon for Imperial Venator
 - [x] Merge Imperial Enforcer AI improvements in
-- [ ] replace kam1c_c with new copy of script that removes ingame intro movie call (we're using the transition movie instead); this is fine since it is a singleplayer only mission script, so no worries about desync (fingers crossed)
+- [x] replace kam1c_c with new copy of script that removes ingame intro movie call (we're using the transition movie instead); this is fine since it is a singleplayer only mission script, so no worries about desync (fingers crossed)
 
 ### Stretch
 - [x] Space Kamino Ingame Movie (this will be tough) workaround, placing these movies in shell.mvs and calling them as the transition movies instead works fine
@@ -27,15 +27,15 @@ Update this section!
 - [x] Order 66 Mygeeto
 - [x] Order 66 Kashyyyk
 - [ ] Space Mustafar Assault?
-- [ ] Challenge Campaigns stats screen(s)? nah, maybe later
+- ~~[ ] Challenge Campaigns stats screen(s)?~~
 
 ### Localization
-- [ ] Another Localization Pass,
+- [x] Another Localization Pass,
 - [x] think the two Order 66 modes are missing some localization
 
 ### Testing
 Splitscreen Stability Testing: 
-- [ ] Challenges, 
+- [x] Challenges, 
 - [ ] Subjugation, 
 - [x] Order 66, 
 - [ ] Reconquest of the Rim, 
