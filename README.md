@@ -11,14 +11,19 @@ https://www.youtube.com/watch?v=RGbPfWr0dlg
 - New Units
 - Expanded Galactic Conquest
 - More mission slots available for DLC (you must **NOT** install Pandemic's Official DLC Packs alongside this Title Update mod)
+- And other additions or changes
+- Retains Full Multiplayer Compatibility with regular Title Update Players (*todo:* test that this works stably for all gamemodes)
 
 ### New Game Modes
+<img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/3d8ad432-07ae-431a-896c-66e7b17003b5" width="45%"></img> <img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/b689aa31-81ae-471e-a421-5acd704a84ec" width="45%"></img> 
+
 - PSP Challenge Campaigns
 - Order 66
 - Subjugation
 - New Hunt Modes
 - New Hero Assault Modes
 - New combinations like Clone Wars Hoth and Endor
+  
 ### New Maps
 - Bespin Cloud City (SWBF1)
 - Bespin Platforms (SWBF1)
@@ -34,12 +39,17 @@ https://www.youtube.com/watch?v=RGbPfWr0dlg
 - Korriban: Ruins (SWBFRS)
 - Saleucami: Caldera City (SWBFRS)
 - Coruscant: Streets (SWBF1 by Rends)
+- Space: Kamino (restored by DylanRocket)
 - **Support for current and future Xbox Mod DLC Maps**
+  
 ### New Heroes
+
 
 ### New Units
 
+
 ### Expanded Galactic Conquest
+<img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/2f941882-7282-4edb-8e36-42fe2cc847b6" width="23%"></img> <img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/acd6a751-0a44-45c6-8d0c-6e4d1a8802d8" width="23%"></img> <img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/fdbd348f-6750-4729-a3c5-4365b4b85294" width="23%"></img> <img src="https://github.com/jcarpenter48/swbf2_tux/assets/70227084/ad6c6ad2-b4e5-4049-bf92-e1ab6c6cf595" width="23%"></img> 
 - More planets are available across all eras of Galactic Conquest
 - **Support for dynamic addition of current and future Xbox Mod DLC Maps**
 - Player selection of Team upon initialization of any Galactic Conquest scenario
