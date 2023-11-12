@@ -117,6 +117,7 @@ Update this section!
 - [x] spa3_r - Needs TIE spawns lowered some, ship icon for Imperial Venator
 - [x] Merge Imperial Enforcer AI improvements in
 - [x] replace kam1c_c with new copy of script that removes ingame intro movie call (we're using the transition movie instead); this is fine since it is a singleplayer only mission script, so no worries about desync (fingers crossed)
+- [ ] Localization bug: Hero Assault, when on loading screen, says 'Space Assault'
 
 ### Stretch
 - [x] Space Kamino Ingame Movie (this will be tough) workaround, placing these movies in shell.mvs and calling them as the transition movies instead works fine
