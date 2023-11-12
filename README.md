@@ -31,7 +31,9 @@ https://www.youtube.com/watch?v=RGbPfWr0dlg
 - Kamino: Tipoca City (SWBF1)
 - Kashyyyk: Docks (SWBF1)
 - Kashyyyk: Islands (SWBF1)
+- Mustafar: Laboratory (SWBFES)
 - Naboo: Plains (SWBF1)
+- Naboo: Theed Streets (SWBF1 2003 Beta)
 - Rhen Var: Citadel (SWBF1)
 - Rhen Var: Harbour (SWBF1)
 - Tatooine: Dune Sea (SWBF1)
@@ -137,6 +139,8 @@ Splitscreen Stability Testing:
 - [x] Order 66, 
 - [x] Reconquest of the Rim, 
 - [x] Galactic Conquest
-
 - [ ] Galactic Conquest Testing (misc)
-- [ ] Multiplayer Testing (System Link, Insignia) 
+- [ ] Multiplayer Testing (System Link, Insignia)
+Performance Testing:
+- [ ] Naboo: Theed Streets
+
