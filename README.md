@@ -133,10 +133,10 @@ Update this section!
 ### Testing
 Splitscreen Stability Testing: 
 - [x] Challenges, 
-- [ ] Subjugation, 
+- [x] Subjugation, 
 - [x] Order 66, 
-- [ ] Reconquest of the Rim, 
-- [ ] Galactic Conquest
+- [x] Reconquest of the Rim, 
+- [x] Galactic Conquest
 
 - [ ] Galactic Conquest Testing (misc)
 - [ ] Multiplayer Testing (System Link, Insignia) 
