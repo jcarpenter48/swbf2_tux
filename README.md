@@ -112,7 +112,7 @@ Update this section!
 - [x] Try to figure out why locals aren't spawning on Geonosis Spire
 - [x] Fix or replace towcables on Geonosis Spire GCW
 - [x] Galactic Conquest voices (planet voiceovers)
-- [ ] Galactic Conquest AI Fleet-building (no idea if this was a problem with base-game or not, or if it's an emulator problem or actually related to the recompiled shell)
+- [x] Galactic Conquest AI Fleet-building (no idea if this was a problem with base-game or not, or if it's an emulator problem or actually related to the recompiled shell)
 - [x] Rebel Raider challenges (Mygeeto is mostly working, need to repeat the process for the other maps and then fix things up) should be workable, except spa1 which was removed
 - [x] spa3_r - Needs TIE spawns lowered some, ship icon for Imperial Venator
 - [x] Merge Imperial Enforcer AI improvements in
@@ -140,9 +140,9 @@ Splitscreen Stability Testing:
 - [x] Order 66, 
 - [x] Reconquest of the Rim, 
 - [x] Galactic Conquest
-- [ ] Galactic Conquest Testing (misc)
+- [x] Galactic Conquest Testing (misc)
 - [ ] Multiplayer Testing (System Link, Insignia)
 
 Performance Testing:
-- [ ] Naboo: Theed Streets
+- [x] Naboo: Theed Streets
 
